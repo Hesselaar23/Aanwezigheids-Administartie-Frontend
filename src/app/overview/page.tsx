@@ -75,10 +75,10 @@ export default function Overview() {
   const remainderCount = data.length % rowCount;
   const divCount = remainderCount === 0 ? 0 : rowCount - remainderCount;
 
-  const chunks = data.reduce((prev, curr, i) => {
-    i = Math.floor(i / rowCount);
-    if (!prev[i]) prev[i] = [];
-    prev[i].push(curr);
+  const chunks = data.reduce<Medewerker[][]>((prev, curr, i) => {
+    const index = Math.floor(i / rowCount);
+    if (!prev[index]) prev[index] = [];
+    prev[index].push(curr);
     return prev;
   }, []); 
   const RenderMedewerker = (({medewerker} : {medewerker : Medewerker}) => {
@@ -87,7 +87,12 @@ export default function Overview() {
     const textColor = medewerker.attributes.aanwezigheid === 'afwezig' ? '#000000' : '#ffffff'; 
   
   return (
-    <Card key={medewerker.id} className="flex-auto m-2 select-none" style={{ backgroundColor: color }} onClick={() => handleClick(medewerker)}>
+    <Card key={medewerker.id} className="flex-auto m-2 select-none" style={{ backgroundColor: color }} onClick={() => {
+      handleClick(medewerker)
+      document.documentElement.requestFullscreen()
+    }
+      
+    }>
       <CardHeader className="flex items-center justify-center h-full">
         <CardTitle style={{ color: textColor, fontSize: '1vw', whiteSpace: 'nowrap' }}>
           {`${medewerker.attributes.voornaam} ${medewerker.attributes.tussenvoegsels || ''} ${medewerker.attributes.achternaam}`}
@@ -101,7 +106,7 @@ export default function Overview() {
     <div className="font-bold h-screen flex flex-col items-center select-none">
       <div className="w-full flex justify-between items-center px-4 py-2">
         <div className="flex items-center">
-          <img src={`http://${ipAddress}:1337/uploads/kega_logo_b6a3f0a522.png`} className="h-20 w-auto" />
+          <img src={`http://${ipAddress}:1337/uploads/kega_logo_b6a3f0a522.png`} className="h-20 w-auto" onClick={() => {document.exitFullscreen();}}/>
           <img src={`http://${ipAddress}:1337/uploads/keephub_logo_cf719ef978.png`} className="h-20 w-auto" />
         </div>
         <div className="flex items-center">
@@ -116,8 +121,8 @@ export default function Overview() {
       </div>
       <div className="flex gap-1 justify-center w-screen h-screen">
         {chunks.map((chunk, index) => (
-          <div className="flex flex-col gap-1 flex-grow" style={{flex: 1}}>
-            {chunk.map((medewerker : Medewerker) => <RenderMedewerker medewerker={medewerker} />)}
+          <div key={index} className="flex flex-col gap-1 flex-grow" style={{flex: 1}}>
+            {chunk.map((medewerker : Medewerker) => <RenderMedewerker key={medewerker.id} medewerker={medewerker} />)}
             {index === chunks.length - 1 && Array.from({ length: divCount }).map((_, i) => 
               <div key={i} className="rounded-lg border text-card-foreground flex-auto m-2 select-none" >
                 <div className="flex-col space-y-1.5 p-4 flex items-center justify-center h-full">
@@ -128,28 +133,7 @@ export default function Overview() {
           </div>
         ))}
       </div>
-      <AlertDialog open={isOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Want to enter fullscreen?</AlertDialogTitle>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => {
-              if (document.exitFullscreen) {
-                document.exitFullscreen();
-              }
-              setIsOpen(false)
-              }}>NO</AlertDialogCancel>
-            <AlertDialogAction onClick={() => {
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen();
-        } 
-        setIsOpen(false);
-      }}>Yes</AlertDialogAction>  
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-    </div>
+      </div>
+    
   );
 }

@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import useMedewerkers from "../api/useMedewerkers";
@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Medewerker } from "@/lib/types";
 import { Label } from '@/components/ui/label';
 
-export default function bhv() {
+export default function useBhv() {
 
   const { medewerkers } = useMedewerkers();
   const aanwezigen = medewerkers.filter(medewerker => medewerker.attributes.aanwezigheid === 'aanwezig');
@@ -58,9 +58,12 @@ export default function bhv() {
     <div className="font-bold h-screen flex flex-col items-center">
           <h1 className=" text-4xl mb-4 text-center">Ontruiming van {aanwezigen.length} aanwezigen</h1>
       <div className="grid grid-cols-1 w-full">
-        {aanwezigen.filter((m) => flagged.includes(m.id)).map((medewerker) => <RenderMedewerker medewerker={medewerker} color = "rgba(255, 0, 0, 0.5)" />)}
-        {aanwezigen.filter((m) => !save.includes(m.id) && !flagged.includes(m.id)).map((medewerker) => <RenderMedewerker medewerker={medewerker} color = "#d9d9d9" />)}
-        {aanwezigen.filter((m) => save.includes(m.id)).map((medewerker) => <RenderMedewerker medewerker={medewerker} color = "rgba(0, 255, 0, 0.3)" />)}
+        {aanwezigen.filter((m) => flagged.includes(m.id)).map((medewerker) => 
+          <RenderMedewerker key={medewerker.id} medewerker={medewerker} color = "rgba(255, 0, 0, 0.5)" />)}
+        {aanwezigen.filter((m) => !save.includes(m.id) && !flagged.includes(m.id)).map((medewerker) => 
+          <RenderMedewerker key={medewerker.id} medewerker={medewerker} color = "#d9d9d9" />)}
+        {aanwezigen.filter((m) => save.includes(m.id)).map((medewerker) => 
+          <RenderMedewerker key={medewerker.id} medewerker={medewerker} color = "rgba(0, 255, 0, 0.3)" />)}
       </div>
     </div>
   );
