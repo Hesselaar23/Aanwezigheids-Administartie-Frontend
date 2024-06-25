@@ -76,7 +76,7 @@ export default function Overview() {
   return (
     <Card key={medewerker.id} className="flex-auto m-2 select-none" style={{ backgroundColor: color }} onClick={() => {
       handleClick(medewerker)
-      document.documentElement.requestFullscreen()
+      
     }
       
     }>
@@ -93,7 +93,7 @@ export default function Overview() {
     <div className="font-bold h-screen flex flex-col items-center select-none">
       <div className="w-full flex justify-between items-center px-4 py-2">
         <div className="flex items-center">
-          <img src={`https://original-peace-bc5b1fa571.media.strapiapp.com/small_kega_logo_b6a3f0a522_4999cbacc2.png`} className="h-20 w-auto" onClick={() => {document.exitFullscreen();}}/>
+          <img src={`https://original-peace-bc5b1fa571.media.strapiapp.com/small_kega_logo_b6a3f0a522_4999cbacc2.png`} className="h-20 w-auto" onClick={() => {  if (document.fullscreenElement) {document.exitFullscreen(); document.body.style.overflow = '';}}}/>
           <img src={`https://original-peace-bc5b1fa571.media.strapiapp.com/keephub_logo_cf719ef978_e7e5955fda.png`} className="h-20 w-auto" />
         </div>
         <div className="flex items-center">
@@ -106,7 +106,7 @@ export default function Overview() {
           </div>
         </div>
       </div>
-      <div className="flex gap-1 justify-center w-screen h-screen">
+      <div className="flex gap-1 justify-center w-screen h-screen" onClick={() => {  if (!document.fullscreenElement) {document.documentElement.requestFullscreen(); document.body.style.overflow = 'hidden'; }}}>
         {chunks.map((chunk, index) => (
           <div key={index} className="flex flex-col gap-1 flex-grow" style={{flex: 1}}>
             {chunk.map((medewerker : Medewerker) => <RenderMedewerker key={medewerker.id} medewerker={medewerker} />)}
