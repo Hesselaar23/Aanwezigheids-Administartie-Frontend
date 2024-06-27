@@ -3,34 +3,11 @@ import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import useMedewerkers from "../api/useMedewerkers";
 import { Medewerker } from "@/lib/types";
-import config from '@/lib/ip_config.json';
 
 
 export default function Overview() {
-  const { medewerkers, loading, error, updateMedewerker } = useMedewerkers();
-  const ipAddress = config.ipAddress;
+  const { medewerkers, loading, error } = useMedewerkers();
   const [cardColors, setCardColors] = useState<{ [key: string]: string }>({});
-
-  const handleClick = async (medewerker: Medewerker) => {
-    let newStatus: 'aanwezig' | 'afwezig' | 'extern';
-    if (medewerker.attributes.aanwezigheid === 'extern') {
-      newStatus = 'aanwezig';
-    } else {
-      newStatus = medewerker.attributes.aanwezigheid === 'aanwezig' ? 'afwezig' : 'aanwezig';
-    }
-  
-    const updatedMedewerker = {
-      ...medewerker,
-      attributes: {
-          ...medewerker.attributes,
-         aanwezigheid: newStatus,
-        id : medewerker.id
-      },
-    }; 
-
-    updateMedewerker(updatedMedewerker);
-    
-  };
   
   useEffect(() => {
     const updatedCardColors: { [key: string]: string } = {};
@@ -74,8 +51,7 @@ export default function Overview() {
     const textColor = medewerker.attributes.aanwezigheid === 'afwezig' ? '#000000' : '#ffffff';
   
   return (
-    <Card key={medewerker.id} className="flex-auto m-2 select-none" style={{ backgroundColor: color }} onClick={() => {
-      handleClick(medewerker)}}>
+    <Card key={medewerker.id} className="flex-auto m-2 select-none" style={{ backgroundColor: color }}>
       <CardHeader className="flex items-center justify-center h-full">
         <CardTitle style={{ color: textColor, fontSize: '1vw', whiteSpace: 'nowrap' }}>
           {`${medewerker.attributes.voornaam} ${medewerker.attributes.tussenvoegsels || ''} ${medewerker.attributes.achternaam}`}
@@ -89,7 +65,7 @@ export default function Overview() {
     <div className="font-bold h-screen flex flex-col items-center select-none">
       <div className="w-full flex justify-between items-center px-4 py-2">
         <div className="flex items-center">
-          <img src={`https://original-peace-bc5b1fa571.media.strapiapp.com/small_kega_logo_b6a3f0a522_4999cbacc2.png`} className="h-20 w-auto" onClick={() => {  if (document.fullscreenElement) {document.exitFullscreen(); document.body.style.overflow = '';}}}/>
+          <img src={`https://original-peace-bc5b1fa571.media.strapiapp.com/small_kega_logo_b6a3f0a522_4999cbacc2.png`} className="h-20 w-auto"/>
           <img src={`https://original-peace-bc5b1fa571.media.strapiapp.com/keephub_logo_cf719ef978_e7e5955fda.png`} className="h-20 w-auto" />
         </div>
         <div className="flex items-center">
@@ -102,7 +78,7 @@ export default function Overview() {
           </div>
         </div>
       </div>
-      <div className="flex gap-1 justify-center w-screen h-screen" onClick={() => {  if (!document.fullscreenElement) {document.documentElement.requestFullscreen(); document.body.style.overflow = 'hidden'; }}}>
+      <div className="flex gap-1 justify-center w-screen h-screen">
         {chunks.map((chunk, index) => (
           <div key={index} className="flex flex-col gap-1 flex-grow" style={{flex: 1}}>
             {chunk.map((medewerker : Medewerker) => <RenderMedewerker key={medewerker.id} medewerker={medewerker} />)}
