@@ -97,7 +97,7 @@ export default function Overview() {
         </div>
         <div className="flex items-center"> 
           <h1 className="mr-4 text-2xl">Aantal <br/> aanwezigen</h1>
-          <div className="text-4xl text-custom-pink rounded-full h-20 w-20 flex items-center justify-center border-4 border-custom-pink">
+          <div className="text-4xl text-white bg-custom-pink rounded-full h-20 w-20 flex items-center justify-center border-4 border-custom-pink">
             {medewerkers.filter(medewerker => medewerker.attributes.aanwezigheid === 'aanwezig').length}
           </div>
         </div>
