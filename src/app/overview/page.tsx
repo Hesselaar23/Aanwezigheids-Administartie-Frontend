@@ -11,6 +11,13 @@ export default function Overview() {
   const ipAddress = config.ipAddress;
   const [cardColors, setCardColors] = useState<{ [key: string]: string }>({});
 
+  const makeFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      document.exitFullscreen();
+      document.documentElement.requestFullscreen();
+    }}
+
   const handleClick = async (medewerker: Medewerker) => {
     let newStatus: 'aanwezig' | 'afwezig' | 'extern';
     if (medewerker.attributes.aanwezigheid === 'extern') {
@@ -72,6 +79,9 @@ export default function Overview() {
 
     const color = cardColors[medewerker.id] || '#ffffff'; 
     const textColor = medewerker.attributes.aanwezigheid === 'afwezig' ? '#000000' : '#ffffff';
+
+  
+  
   
   return (
     <Card key={medewerker.id} className="flex-auto m-2 select-none" style={{ backgroundColor: color }} onClick={() => {
@@ -102,7 +112,7 @@ export default function Overview() {
           </div>
         </div>
       </div>
-      <div className="flex gap-1 justify-center w-screen h-screen" onClick={() => {  if (!document.fullscreenElement) {document.documentElement.requestFullscreen(); document.body.style.overflow = 'hidden'; }}}>
+      <div className="flex gap-1 justify-center w-screen h-screen" onClick={() => makeFullScreen()}>
         {chunks.map((chunk, index) => (
           <div key={index} className="flex flex-col gap-1 flex-grow" style={{flex: 1}}>
             {chunk.map((medewerker : Medewerker) => <RenderMedewerker key={medewerker.id} medewerker={medewerker} />)}
